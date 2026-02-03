@@ -1,0 +1,6 @@
+[submodule "dotbot-libs"]
+	path = dotbot-libs
+	url = https://github.com/swarmit-dcoss-iot/dotbot-libs
+[submodule "mari"]
+	path = mari
+	url = https://github.com/swarmit-dcoss-iot/mari

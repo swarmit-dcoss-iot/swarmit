@@ -1,0 +1,110 @@
+[build-system]
+requires = [
+    "hatchling>=1.4.1",
+]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = [
+    "swarmit/dashboard/frontend/*",
+    "swarmit/cli/*.toml",
+    "*.py"
+]
+exclude = [
+    "device/",
+    "sample/",
+    "swarmit/dashboard/frontend/node_modules",
+    "dotbot-libs/",
+    "utils/"
+]
+
+[tool.hatch.build.targets.sdist.hooks.custom]
+path = "utils/hooks/sdist.py"
+
+[tool.hatch.version]
+path = "swarmit/__init__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[project]
+name = "swarmit"
+dynamic = ["version"]
+authors = [
+    { name="Anonymous Anon", email="anonymous@anon.org" },
+]
+dependencies = [
+    "click          >= 8.1.7",
+    "cryptography   >= 46.0.3",
+    "pydotbot-utils >= 0.3.0",
+    "rich           >= 14.0.0",
+    "structlog      >= 24.4.0",
+    "tqdm           >= 4.66.5",
+    "marilib-pkg    >= 0.8.0",
+]
+description = "Run Your Own Robot Swarm Testbed."
+readme = "README.md"
+license = { text="BSD" }
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+]
+
+[project.optional-dependencies]
+dashboard = [
+    "fastapi        >= 0.121.2",
+    "PyJWT          >= 2.9.0",
+    "SQLAlchemy     >= 2.0.25",
+    "uvicorn        >= 0.38.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/swarmit-dcoss-iot/swarmit"
+"Bug Tracker" = "https://github.com/swarmit-dcoss-iot/swarmit/issues"
+
+[project.scripts]
+swarmit = "swarmit.cli.main:main"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "codecov",
+  "pytest",
+  "pytest-asyncio",
+  "pytest-cov",
+]
+features = [
+  "dashboard",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:swarmit}"
+
+[tool.pytest.ini_options]
+addopts = """
+-vv -s
+--color=yes
+--doctest-modules
+--cov=swarmit --cov-report=term --cov-report=term-missing --cov-report=xml
+"""
+testpaths = [
+    "swarmit",
+]
+
+[tool.ruff]
+lint.select = ["E", "F"]
+line-length = 88
+lint.ignore = ["E501", "E722"]
+exclude = ["dotbot-libs/", ".tox/"]
+
+[tool.isort]
+multi_line_output = 3  # Use Vertical Hanging Indent
+profile = "black"
+skip = ["dotbot-libs/", ".tox/"]
+
+[tool.black]
+line-length = 79
+skip-string-normalization = true
